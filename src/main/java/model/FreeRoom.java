@@ -6,12 +6,4 @@ public class FreeRoom extends Room {
         super(roomNumber, 0.0, enumeration);
     }
 
-    @Override
-    public String toString() {
-        return "FreeRoom{" +
-                "roomNumber='" + roomNumber + '\'' +
-                ", price=0.0" +
-                ", enumeration=" + enumeration +
-                '}';
-    }
 }

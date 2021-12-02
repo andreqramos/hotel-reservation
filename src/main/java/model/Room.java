@@ -3,12 +3,12 @@ package model;
 public class Room implements IRoom{
     protected String roomNumber;
     protected Double price;
-    protected RoomType enumeration;
+    protected RoomType roomType;
 
-    public Room(String roomNumber, Double price, RoomType enumeration) {
+    public Room(String roomNumber, Double price, RoomType roomType) {
         this.roomNumber = roomNumber;
         this.price = price;
-        this.enumeration = enumeration;
+        this.roomType = roomType;
     }
 
     public String getRoomNumber() {
@@ -20,7 +20,7 @@ public class Room implements IRoom{
     }
 
     public RoomType getRoomType() {
-        return enumeration;
+        return roomType;
     }
 
     public boolean isFree() {
@@ -29,7 +29,7 @@ public class Room implements IRoom{
 
     @Override
     public String toString() {
-        if(enumeration.equals(RoomType.SINGLE))
+        if(roomType.equals(RoomType.SINGLE))
             return "Room Number: " + roomNumber +   " Single bed Room Price: $" + price;
         return "Room Number: " + roomNumber +   " Double bed Room Price: $" + price;
     }

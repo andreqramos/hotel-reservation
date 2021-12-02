@@ -1,24 +1,23 @@
 package model;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Customer {
 
     private String firstName;
     private String lastName;
-    private String email;
+    private String customerEmail;
 
 
-    public Customer(String firstName, String lastName, String email) {
+    public Customer(String firstName, String lastName, String customerEmail) {
 
         Pattern pattern = Pattern.compile("[a-z0-9_.]+@[a-z]+[.]com");
-        if(!pattern.matcher(email).matches())
+        if(!pattern.matcher(customerEmail).matches())
             throw new IllegalArgumentException();
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.customerEmail = customerEmail;
     }
 
     public void setFirstName(String firstName) {
@@ -37,16 +36,16 @@ public class Customer {
         return lastName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCustomerEmail() {
+        return customerEmail;
     }
 
     @Override
     public String toString() {
-        return "First Name: " + firstName + " Last Name: " + lastName + " Email: " + email;
+        return "First Name: " + firstName + " Last Name: " + lastName + " Email: " + customerEmail;
     }
 }

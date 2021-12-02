@@ -53,7 +53,7 @@ public final class ReservationService {
         Reservation reservation = new Reservation(reservationId, customer, room, checkInDate, checkOutDate);
         reservations.put(reservationId, reservation);
         this.updateOccupiedRooms(room.getRoomNumber(), checkInDate, checkOutDate);
-        this.updateCustomersReservations(customer.getEmail(), reservationId);
+        this.updateCustomersReservations(customer.getCustomerEmail(), reservationId);
         return reservation;
     }
 
@@ -107,9 +107,9 @@ public final class ReservationService {
 
     public Collection<Reservation> getCustomersReservation(Customer customer) {
         Collection<Reservation> reservations = new ArrayList<>();
-        if(!customersReservations.containsKey(customer.getEmail()))
+        if(!customersReservations.containsKey(customer.getCustomerEmail()))
             return reservations;
-        for(String reservationId: customersReservations.get(customer.getEmail())) {
+        for(String reservationId: customersReservations.get(customer.getCustomerEmail())) {
             Reservation reservation = this.getAReservation(reservationId);
             reservations.add(reservation);
         }

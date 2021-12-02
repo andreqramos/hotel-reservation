@@ -1,7 +1,6 @@
 package service;
 
 import model.Customer;
-import model.Reservation;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,7 +22,7 @@ public final class CustomerService {
 
     public void addCustomer(String email, String firstName, String lastName) {
         Customer customer = new Customer(firstName, lastName, email);
-        customers.put(customer.getEmail(), customer);
+        customers.put(customer.getCustomerEmail(), customer);
     }
 
     public Customer getCustomer(String customerEmail) {
