@@ -138,4 +138,30 @@ public class Customer {
         }
         return check;
     }
+
+    public boolean deleteCustomer(String customerEmail) {
+
+        Database db = new Database();
+        db.connect();
+        String sql = "DELETE FROM customer WHERE customerEmail=?";
+        boolean check = true;
+
+        try{
+            db.pst = db.connection.prepareStatement(sql);
+            db.pst.setInt(1, customerEmail);
+            db.pst.execute();
+            check = true;
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+            check = false;
+        }finally {
+            try {
+                db.connection.close();
+                db.pst.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return check;
+    }
 }
