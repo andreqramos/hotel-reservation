@@ -1,5 +1,8 @@
 package model;
 
+import service.Database;
+
+import java.sql.SQLException;
 import java.util.Date;
 
 public class Reservation {
@@ -68,4 +71,36 @@ public class Reservation {
                 ", checkOutDate=" + checkOutDate +
                 '}';
     }
+
+    public boolean createReservation(Reservation reservation){
+
+        Database db = new Database();
+        db.connect();
+
+        String sql = "INSERT INTO Reservation(reservationId, checkInDate, checkOutDate, customerEmail, roomNumber) VALUES (?, ?, ?, ?, ?)";
+
+        boolean check = true;
+        try{
+            db.pst = db.connection.prepareStatement(sql);
+            db.pst.setString(1, reservation.getReservationId());
+            db.pst.setDate(2, reservation.getCheckInDate());
+            db.pst.setDate(3, reservation.getCheckInDate());
+            db.pst.setString(4,reservation.getCustomer().getCustomerEmail());
+            db.pst.setString(5, reservation.getRoom().getRoomNumber());
+            db.pst.execute();
+            check = true;
+        } catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+            check = false;
+        } finally {
+            try{
+                db.connection.close();
+                db.pst.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return check;
+    }
+
 }
