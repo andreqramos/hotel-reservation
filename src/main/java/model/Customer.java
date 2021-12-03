@@ -116,13 +116,14 @@ public class Customer {
 
         Database db = new Database();
         db.connect();
-        String sql = "UPDATE customer SET firstName=? WHERE customerEmail=?";
+        String sql = "UPDATE Customer SET firstName=?, lastName=? WHERE customerEmail=?";
         boolean check = true;
 
         try{
             db.pst = db.connection.prepareStatement(sql);
             db.pst.setString(1, firstName);
-            db.pst.setInt(2, customerEmail);
+            db.pst.setString(2, lastName);
+            db.pst.setString(3, customerEmail);
             db.pst.execute();
             check = true;
         }catch (SQLException e){
@@ -143,12 +144,12 @@ public class Customer {
 
         Database db = new Database();
         db.connect();
-        String sql = "DELETE FROM customer WHERE customerEmail=?";
+        String sql = "DELETE FROM Customer WHERE customerEmail=?";
         boolean check = true;
 
         try{
             db.pst = db.connection.prepareStatement(sql);
-            db.pst.setInt(1, customerEmail);
+            db.pst.setString(1, customerEmail);
             db.pst.execute();
             check = true;
         }catch (SQLException e){
