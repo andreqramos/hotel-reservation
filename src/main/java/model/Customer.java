@@ -2,6 +2,7 @@ package model;
 
 import service.Database;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Customer {
@@ -9,7 +10,6 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String customerEmail;
-
 
     public Customer(String firstName, String lastName, String customerEmail) {
 
@@ -79,4 +79,39 @@ public class Customer {
         }
         return check;
     }
+
+    public ArrayList<Customer> readCustomer(){
+        Database db = new Database();
+        db.connect();
+        ArrayList<Customer> customer = new ArrayList<>();
+        String sql = "SELECT * FROM Customer";
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+
+            while(db.result.next()){
+                Customer customerTemp = new Customer(db.result.getString("firstName"),
+                        db.result.getString("lastName"), db.result.getString("customerEmail"));
+                System.out.println("First Name = " + customerTemp.getFirstName());
+                System.out.println("Last Name = " + customerTemp.getLastName());
+                System.out.println("Customer Email = " + customerTemp.getCustomerEmail());
+                System.out.println("------------------------------");
+                customer.add(customerTemp);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return customer;
+    }
+
+
+
 }
