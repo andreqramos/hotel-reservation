@@ -128,4 +128,30 @@ public class Room implements IRoom{
         return check;
     }
 
+    public boolean deleteRoom(String roomNumber) {
+
+        Database db = new Database();
+        db.connect();
+        String sql = "DELETE FROM Room WHERE roomNumber=?";
+        boolean check = true;
+
+        try{
+            db.pst = db.connection.prepareStatement(sql);
+            db.pst.setString(1, roomNumber);
+            db.pst.execute();
+            check = true;
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+            check = false;
+        }finally {
+            try {
+                db.connection.close();
+                db.pst.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return check;
+    }
+
 }
