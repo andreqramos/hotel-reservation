@@ -99,4 +99,33 @@ public class Room implements IRoom{
         }
         return room;
     }
+
+    public boolean updateRoom(String roomNumber, RoomType roomType, Double price ){
+
+        Database db = new Database();
+        db.connect();
+        String sql = "UPDATE Room SET roomType=?, price=? WHERE roomNumber=?";
+        boolean check = true;
+
+        try{
+            db.pst = db.connection.prepareStatement(sql);
+            db.pst.setString(1, roomType);
+            db.pst.setString(2, price);
+            db.pst.setString(3, roomNumber);
+            db.pst.execute();
+            check = true;
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+            check = false;
+        }finally {
+            try {
+                db.connection.close();
+                db.pst.close();
+            }catch (SQLException e) {
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return check;
+    }
+
 }

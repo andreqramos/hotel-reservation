@@ -144,17 +144,17 @@ public class Reservation {
 
         Database db = new Database();
         db.connect();
-        String sql = "UPDATE Reservation SET reservationId=?, checkInDate=?, checkOutDate=?, customerEmail=?," +
-                     "roomNumber=? WHERE customerEmail=?";
+        String sql = "UPDATE Reservation SET checkInDate=?, checkOutDate=?, customerEmail=?," +
+                     "roomNumber=? WHERE reservationId=?";
         boolean check = true;
 
         try{
             db.pst = db.connection.prepareStatement(sql);
-            db.pst.setString(1, reservationId);
-            db.pst.setDate(2, checkInDate);
-            db.pst.setDate(3, checkOutDate);
-            db.pst.setString(4, customerEmail);
-            db.pst.setString(5, roomNumber);
+            db.pst.setDate(1, checkInDate);
+            db.pst.setDate(2, checkOutDate);
+            db.pst.setString(3, customerEmail);
+            db.pst.setString(4, roomNumber);
+            db.pst.setString(5, reservationId);
             db.pst.execute();
             check = true;
         }catch (SQLException e){
