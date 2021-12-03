@@ -4,10 +4,10 @@ import java.sql.*;
 
 public class Database {
 
-    Connection connection;
-    Statement statement;
-    ResultSet result;
-    PreparedStatement pst;
+    public Connection connection;
+    public Statement statement;
+    public ResultSet result;
+    public PreparedStatement pst;
 
     static final String user = "";
     static final String password = "";
@@ -21,7 +21,7 @@ public class Database {
             connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connection made sucefully: " + connection);
         }catch (SQLException e){
-            System.out.println("Connection Error: " e.getMessage());
+            System.out.println("Connection Error: " + e.getMessage());
         }
     }
 }
