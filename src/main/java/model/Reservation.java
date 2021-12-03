@@ -171,4 +171,29 @@ public class Reservation {
         return check;
     }
 
+    public boolean deleteReservation(String reservationId) {
+
+        Database db = new Database();
+        db.connect();
+        String sql = "DELETE FROM Reservation WHERE reservationId=?";
+        boolean check = true;
+
+        try{
+            db.pst = db.connection.prepareStatement(sql);
+            db.pst.setString(1, reservationId);
+            db.pst.execute();
+            check = true;
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+            check = false;
+        }finally {
+            try {
+                db.connection.close();
+                db.pst.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return check;
+    }
 }
