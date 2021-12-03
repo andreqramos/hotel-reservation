@@ -121,7 +121,7 @@ public class Reservation {
                 System.out.println("CheckInDate = " + reservationTemp.getCheckInDate());
                 System.out.println("CheckOutDate = " + reservationTemp.getCheckOutDate());
                 System.out.println("Customer Email = " + reservationTemp.getCustomer().getCustomerEmail();
-                System.out.println("Room Number" = + reservationTemp.getRoom().getRoomNumber());
+                System.out.println("Room Number = " + reservationTemp.getRoom().getRoomNumber());
                 System.out.println("------------------------------");
                 customer.add(reservationTemp);
             }
@@ -138,4 +138,37 @@ public class Reservation {
         }
         return reservation;
     }
+
+    public boolean updateReservation(String reservationId, Date checkInDate, Date checkOutDate, String customerEmail,
+                                     String roomNumber){
+
+        Database db = new Database();
+        db.connect();
+        String sql = "UPDATE Reservation SET reservationId=?, checkInDate=?, checkOutDate=?, customerEmail=?," +
+                     "roomNumber=? WHERE customerEmail=?";
+        boolean check = true;
+
+        try{
+            db.pst = db.connection.prepareStatement(sql);
+            db.pst.setString(1, reservationId);
+            db.pst.setDate(2, checkInDate);
+            db.pst.setDate(3, checkOutDate);
+            db.pst.setString(4, customerEmail);
+            db.pst.setString(5, roomNumber);
+            db.pst.execute();
+            check = true;
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+            check = false;
+        }finally {
+            try {
+                db.connection.close();
+                db.pst.close();
+            }catch (SQLException e) {
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return check;
+    }
+
 }
