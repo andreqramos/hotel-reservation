@@ -90,11 +90,11 @@ public class Customer {
             db.result = db.statement.executeQuery(sql);
 
             while(db.result.next()){
-                Customer customerTemp = new Customer(db.result.getString("firstName"),
-                        db.result.getString("lastName"), db.result.getString("customerEmail"));
+                Customer customerTemp = new Customer(db.result.getString("customerEmail"),
+                        db.result.getString("firstName"), db.result.getString("lastName"));
+                System.out.println("customerEmail = " + customerTemp.getCustomerEmail());
                 System.out.println("First Name = " + customerTemp.getFirstName());
                 System.out.println("Last Name = " + customerTemp.getLastName());
-                System.out.println("Customer Email = " + customerTemp.getCustomerEmail());
                 System.out.println("------------------------------");
                 customer.add(customerTemp);
             }

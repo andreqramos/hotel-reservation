@@ -50,7 +50,7 @@ public class Room implements IRoom{
         try{
             db.pst = db.connection.prepareStatement(sql);
             db.pst.setString(1, room.getRoomNumber());
-            db.pst.setInt(2, room.getRoomType());
+            db.pst.setRoomType(2, room.getRoomType());
             db.pst.setDouble(3, room.getRoomPrice());
             db.pst.execute();
             check = true;
@@ -66,5 +66,37 @@ public class Room implements IRoom{
             }
         }
         return check;
+    }
+
+    public ArrayList<Room> readRoom(){
+        Database db = new Database();
+        db.connect();
+        ArrayList<Room> room = new ArrayList<>();
+        String sql = "SELECT * FROM Room";
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+
+            while(db.result.next()){
+                Room roomTemp = new Room(db.result.getString("roomNumber"),
+                        db.result.getString("roomType"), db.result.getString("price"));
+                System.out.println("Room Number = " + roomTemp.getRoomNumber());
+                System.out.println("Room Type = " + roomTemp.getRoomType());
+                System.out.println("Price  = " + roomTemp.getRoomPrice());
+                System.out.println("------------------------------");
+                room.add(roomTemp);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return room;
     }
 }
