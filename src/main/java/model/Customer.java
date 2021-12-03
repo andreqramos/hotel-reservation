@@ -56,7 +56,7 @@ public class Customer {
         Database db = new Database();
         db.connect();
 
-        String sql = "INSERT INTO Costumer(customerEmail, firstName, lastName) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Customer(customerEmail, firstName, lastName) VALUES (?, ?, ?)";
 
         boolean check = true;
         try{
