@@ -3,6 +3,7 @@ package model;
 import service.Database;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Reservation {
@@ -103,4 +104,38 @@ public class Reservation {
         return check;
     }
 
+    public ArrayList<Reservation> readReservation(){
+        Database db = new Database();
+        db.connect();
+        ArrayList<Reservation> reservation = new ArrayList<>();
+        String sql = "SELECT * FROM Reservation";
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+
+            while(db.result.next()){
+                Reservation reservationTemp = new Reservation(db.result.getString("reservationId"),
+                        db.result.getDate("checkInDate"), db.result.getDate("checkOutDate"),
+                        db.result.getString("customerEmail"), db.result.getString("roomNumber"));
+                System.out.println("ReservationId = " + reservationTemp.getReservationId());
+                System.out.println("CheckInDate = " + reservationTemp.getCheckInDate());
+                System.out.println("CheckOutDate = " + reservationTemp.getCheckOutDate());
+                System.out.println("Customer Email = " + reservationTemp.getCustomer().getCustomerEmail();
+                System.out.println("Room Number" = + reservationTemp.getRoom().getRoomNumber());
+                System.out.println("------------------------------");
+                customer.add(reservationTemp);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return reservation;
+    }
 }
