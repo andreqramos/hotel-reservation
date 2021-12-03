@@ -2,9 +2,9 @@ package model;
 
 public class Tester {
     public static void main(String[] args) {
-        Customer customer = new Customer("first", "second", "j@domain.com");
+        Customer customer = new Customer("j@domain.com", "first", "second");
         System.out.println(customer);
 
-        Customer customerFail = new Customer("first", "second", "email");
+        Customer customerFail = new Customer("email", "first", "second");
     }
 }

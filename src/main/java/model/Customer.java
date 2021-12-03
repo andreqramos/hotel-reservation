@@ -11,7 +11,7 @@ public class Customer {
     private String lastName;
     private String customerEmail;
 
-    public Customer(String firstName, String lastName, String customerEmail) {
+    public Customer(String customerEmail, String firstName, String lastName) {
 
         Pattern pattern = Pattern.compile("[a-z0-9_.]+@[a-z]+[.]com");
         if(!pattern.matcher(customerEmail).matches())
