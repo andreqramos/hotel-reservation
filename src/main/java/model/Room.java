@@ -50,7 +50,7 @@ public class Room implements IRoom{
         try{
             db.pst = db.connection.prepareStatement(sql);
             db.pst.setString(1, room.getRoomNumber());
-            db.pst.setRoomType(2, room.getRoomType());
+            db.pst.setInt(2, room.getRoomType().getId());
             db.pst.setDouble(3, room.getRoomPrice());
             db.pst.execute();
             check = true;
@@ -78,8 +78,10 @@ public class Room implements IRoom{
             db.result = db.statement.executeQuery(sql);
 
             while(db.result.next()){
-                Room roomTemp = new Room(db.result.getString("roomNumber"),
-                        db.result.getString("roomType"), db.result.getString("price"));
+                String roomNumber = db.result.getString("roomNumber");
+                RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
+                Double price = db.result.getDouble("price");
+                Room roomTemp = new Room(roomNumber, price, roomType);
                 System.out.println("Room Number = " + roomTemp.getRoomNumber());
                 System.out.println("Room Type = " + roomTemp.getRoomType());
                 System.out.println("Price  = " + roomTemp.getRoomPrice());
@@ -109,8 +111,8 @@ public class Room implements IRoom{
 
         try{
             db.pst = db.connection.prepareStatement(sql);
-            db.pst.setString(1, roomType);
-            db.pst.setString(2, price);
+            db.pst.setInt(1, roomType.getId());
+            db.pst.setDouble(2, price);
             db.pst.setString(3, roomNumber);
             db.pst.execute();
             check = true;
@@ -153,5 +155,4 @@ public class Room implements IRoom{
         }
         return check;
     }
-
 }
