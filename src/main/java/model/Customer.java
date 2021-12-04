@@ -3,6 +3,7 @@ package model;
 import service.Database;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Customer {
@@ -20,6 +21,17 @@ public class Customer {
         this.firstName = firstName;
         this.lastName = lastName;
         this.customerEmail = customerEmail;
+    }
+
+    public static Customer getByTerminal() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter Email format: name@domain.com");
+        String customerEmail = input.nextLine();
+        System.out.println("First Name");
+        String firstName = input.nextLine();
+        System.out.println("Last Name");
+        String lastName = input.nextLine();
+        return new Customer(customerEmail, firstName, lastName);
     }
 
     public void setFirstName(String firstName) {
@@ -51,7 +63,7 @@ public class Customer {
         return "First Name: " + firstName + " Last Name: " + lastName + " Email: " + customerEmail;
     }
 
-    public boolean createCustomer(Customer customer){
+    public static boolean createCustomer(Customer customer){
 
         Database db = new Database();
         db.connect();

@@ -2,6 +2,7 @@ package cli;
 
 import api.AdminResource;
 import api.HotelResource;
+import model.Customer;
 import model.MainMenuOption;
 
 import java.util.Scanner;
@@ -34,13 +35,8 @@ public class MainMenu {
                     hotelResource.getCustomersReservations(customerEmail);
                 }
                 case CREATE_ACCOUNT -> {
-                    Scanner input = new Scanner(System.in);
-                    System.out.println("Enter Email format: name@domain.com");
-                    String customerEmail = input.nextLine();
-                    System.out.println("First Name");
-                    String customerFirstName = input.nextLine();
-                    System.out.println("Last Name");
-                    String customerLastName = input.nextLine();
+                    Customer customer = Customer.getByTerminal();
+                    Customer.createCustomer(customer);
                 }
                 case ADMIN -> AdminMenu.main();
                 case EXIT -> {
