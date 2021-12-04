@@ -16,6 +16,12 @@ public class Room implements IRoom{
         this.roomType = roomType;
     }
 
+    public Room(){
+        this.roomNumber = "";
+        this.price = 0.0;
+        this.roomType = RoomType.SINGLE;
+    }
+
     public String getRoomNumber() {
         return roomNumber;
     }
@@ -87,6 +93,39 @@ public class Room implements IRoom{
                 System.out.println("Price  = " + roomTemp.getRoomPrice());
                 System.out.println("------------------------------");
                 room.add(roomTemp);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return room;
+    }
+
+    public static Room researchRoom(String roomNumber){
+        Database db = new Database();
+        db.connect();
+        String sql = "SELECT * FROM Room WHERE roomNumber=" + roomNumber;
+
+        Room room = new Room();
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+
+            while(db.result.next()){
+                Double price = db.result.getDouble("price");
+                RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
+                room = new Room(roomNumber, price, roomType);
+                System.out.println("roomNumber = " + room.getRoomNumber());
+                System.out.println("price = " + room.getRoomPrice());
+                System.out.println("roomType = " + room.getRoomType());
+                System.out.println("------------------------------");
             }
         }catch (SQLException e){
             System.out.println("Operation Error: " + e.getMessage());

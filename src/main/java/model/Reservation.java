@@ -116,7 +116,7 @@ public class Reservation {
             while(db.result.next()){
                 String reservationId = db.result.getString("reservationId");
                 Customer customer = Customer.researchCustomer(db.result.getString("customerEmail"));
-                Room room = new Room();
+                Room room = Room.researchRoom(db.result.getString("roomNumber"));
                 Date checkInDate = db.result.getDate("checkInDate");
                 Date checkOutDate = db.result.getDate("checkOutDate");
                 RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
