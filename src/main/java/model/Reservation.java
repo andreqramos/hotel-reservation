@@ -84,8 +84,8 @@ public class Reservation {
         try{
             db.pst = db.connection.prepareStatement(sql);
             db.pst.setString(1, reservation.getReservationId());
-            db.pst.setDate(2, reservation.getCheckInDate());
-            db.pst.setDate(3, reservation.getCheckInDate());
+            db.pst.setDate(2, (java.sql.Date) reservation.getCheckInDate());
+            db.pst.setDate(3, (java.sql.Date) reservation.getCheckInDate());
             db.pst.setString(4,reservation.getCustomer().getCustomerEmail());
             db.pst.setString(5, reservation.getRoom().getRoomNumber());
             db.pst.execute();
@@ -107,23 +107,28 @@ public class Reservation {
     public ArrayList<Reservation> readReservation(){
         Database db = new Database();
         db.connect();
-        ArrayList<Reservation> reservation = new ArrayList<>();
+        ArrayList<Reservation> reservations = new ArrayList<>();
         String sql = "SELECT * FROM Reservation";
         try{
             db.statement = db.connection.createStatement();
             db.result = db.statement.executeQuery(sql);
 
             while(db.result.next()){
-                Reservation reservationTemp = new Reservation(db.result.getString("reservationId"),
-                        db.result.getDate("checkInDate"), db.result.getDate("checkOutDate"),
-                        db.result.getString("customerEmail"), db.result.getString("roomNumber"));
+                String reservationId = db.result.getString("reservationId");
+                Customer customer = Customer.researchCustomer(db.result.getString("customerEmail"));
+                Room room = new Room();
+                Date checkInDate = db.result.getDate("checkInDate");
+                Date checkOutDate = db.result.getDate("checkOutDate");
+                RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
+                Double price = db.result.getDouble("price");
+                Reservation reservationTemp = new Reservation(reservationId, customer, room, checkInDate, checkOutDate);
                 System.out.println("ReservationId = " + reservationTemp.getReservationId());
                 System.out.println("CheckInDate = " + reservationTemp.getCheckInDate());
                 System.out.println("CheckOutDate = " + reservationTemp.getCheckOutDate());
-                System.out.println("Customer Email = " + reservationTemp.getCustomer().getCustomerEmail();
+                System.out.println("Customer Email = " + reservationTemp.getCustomer().getCustomerEmail());
                 System.out.println("Room Number = " + reservationTemp.getRoom().getRoomNumber());
                 System.out.println("------------------------------");
-                customer.add(reservationTemp);
+                reservations.add(reservationTemp);
             }
         }catch (SQLException e){
             System.out.println("Operation Error: " + e.getMessage());
@@ -136,7 +141,7 @@ public class Reservation {
                 System.out.println("Error to close the connection: " + e.getMessage());
             }
         }
-        return reservation;
+        return reservations;
     }
 
     public boolean updateReservation(String reservationId, Date checkInDate, Date checkOutDate, String customerEmail,
@@ -150,8 +155,8 @@ public class Reservation {
 
         try{
             db.pst = db.connection.prepareStatement(sql);
-            db.pst.setDate(1, checkInDate);
-            db.pst.setDate(2, checkOutDate);
+            db.pst.setDate(1, (java.sql.Date) checkInDate);
+            db.pst.setDate(2, (java.sql.Date) checkOutDate);
             db.pst.setString(3, customerEmail);
             db.pst.setString(4, roomNumber);
             db.pst.setString(5, reservationId);
