@@ -38,19 +38,17 @@ public class HotelResource {
         return reservationService.getARoom(roomNumber);
     }
 
-    public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
-        Customer customer = getCustomerByCustomerEmail(customerEmail);
+    public Reservation bookARoom(String customerEmail, String roomNumber, Date checkInDate, Date checkOutDate) {
         ReservationService reservationService = ReservationService.getInstance();
-        return reservationService.reserveARoom(customer, room, checkInDate, checkOutDate);
+        return reservationService.reserveARoom(customerEmail, roomNumber, checkInDate, checkOutDate);
     }
 
     public Collection<Reservation> getCustomerReservations() {
         Scanner input = new Scanner(System.in);
         System.out.println("Enter Email format: name@domain.com");
         String customerEmail = input.nextLine();
-        Customer customer = getCustomerByCustomerEmail(customerEmail);
         ReservationService reservationService = ReservationService.getInstance();
-        return reservationService.getCustomerReservations(customer);
+        return reservationService.getCustomerReservations(customerEmail);
     }
 
     public void displayCustomerReservations(){

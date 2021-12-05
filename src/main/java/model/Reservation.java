@@ -3,21 +3,20 @@ package model;
 import service.Database;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Reservation {
 
     private String reservationId;
-    private Customer customer;
-    private IRoom room;
+    private String customerEmail;
+    private String roomNumber;
     private Date checkInDate;
     private Date checkOutDate;
 
-    public Reservation(String reservationId, Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
+    public Reservation(String reservationId, String customerEmail, String roomNumber, Date checkInDate, Date checkOutDate) {
         this.reservationId = reservationId;
-        this.customer = customer;
-        this.room = room;
+        this.customerEmail = customerEmail;
+        this.roomNumber = roomNumber;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
     }
@@ -30,20 +29,20 @@ public class Reservation {
         this.reservationId = reservationId;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public String getCustomerEmail() {
+        return customerEmail;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
-    public IRoom getRoom() {
-        return room;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setRoom(IRoom room) {
-        this.room = room;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
     public Date getCheckInDate() {
@@ -66,8 +65,8 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "reservationId=" + reservationId +
-                "customer=" + customer +
-                ", room=" + room +
+                "customer=" + customerEmail +
+                ", room=" + roomNumber +
                 ", checkInDate=" + checkInDate +
                 ", checkOutDate=" + checkOutDate +
                 '}';
@@ -86,8 +85,8 @@ public class Reservation {
             db.pst.setString(1, reservation.getReservationId());
             db.pst.setDate(2, (java.sql.Date) reservation.getCheckInDate());
             db.pst.setDate(3, (java.sql.Date) reservation.getCheckInDate());
-            db.pst.setString(4,reservation.getCustomer().getCustomerEmail());
-            db.pst.setString(5, reservation.getRoom().getRoomNumber());
+            db.pst.setString(4,reservation.getCustomerEmail());
+            db.pst.setString(5, reservation.getRoomNumber());
             db.pst.execute();
             check = true;
         } catch (SQLException e){

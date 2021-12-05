@@ -103,12 +103,12 @@ public final class ReservationService {
             System.out.println(room);
     }
 
-    public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
+    public Reservation reserveARoom(String customerEmail, String roomNumber, Date checkInDate, Date checkOutDate) {
         String reservationId = String.valueOf(reservations.size() + 1);
-        Reservation reservation = new Reservation(reservationId, customer, room, checkInDate, checkOutDate);
+        Reservation reservation = new Reservation(reservationId, customerEmail, roomNumber, checkInDate, checkOutDate);
         reservations.put(reservationId, reservation);
-        this.updateOccupiedRooms(room.getRoomNumber(), checkInDate, checkOutDate);
-        this.updateCustomersReservations(customer.getCustomerEmail(), reservationId);
+        this.updateOccupiedRooms(roomNumber, checkInDate, checkOutDate);
+        this.updateCustomersReservations(customerEmail, reservationId);
         return reservation;
     }
 
@@ -172,13 +172,12 @@ public final class ReservationService {
 
             while(db.result.next()){
                 String reservationId = db.result.getString("reservationId");
-                Customer customer = Customer.researchCustomer(db.result.getString("customerEmail"));
-                Room room = Room.researchRoom(db.result.getString("roomNumber"));
+                String roomNumber = db.result.getString("roomNumber");
                 Date checkInDate = db.result.getDate("checkInDate");
                 Date checkOutDate = db.result.getDate("checkOutDate");
                 RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
                 Double price = db.result.getDouble("price");
-                Reservation reservationTemp = new Reservation(reservationId, customer, room, checkInDate, checkOutDate);
+                Reservation reservationTemp = new Reservation(reservationId, customerEmail, roomNumber, checkInDate, checkOutDate);
                 reservations.add(reservationTemp);
             }
         }catch (SQLException e){
@@ -205,13 +204,14 @@ public final class ReservationService {
 
             while(db.result.next()){
                 String reservationId = db.result.getString("reservationId");
-                Customer customer = Customer.researchCustomer(db.result.getString("customerEmail"));
-                Room room = Room.researchRoom(db.result.getString("roomNumber"));
+                String customerEmail = db.result.getString("customerEmail");
+                String roomNumber = db.result.getString("roomNumber");
                 Date checkInDate = db.result.getDate("checkInDate");
                 Date checkOutDate = db.result.getDate("checkOutDate");
                 RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
                 Double price = db.result.getDouble("price");
-                Reservation reservationTemp = new Reservation(reservationId, customer, room, checkInDate, checkOutDate);
+                Reservation reservationTemp = new Reservation(reservationId, customerEmail, roomNumber,
+                        checkInDate, checkOutDate);
                 reservations.put(reservationTemp.getReservationId(), reservationTemp);
             }
         }catch (SQLException e){
