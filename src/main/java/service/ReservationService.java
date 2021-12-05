@@ -56,10 +56,6 @@ public final class ReservationService {
                 RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
                 Double price = db.result.getDouble("price");
                 Room roomTemp = new Room(roomNumber, price, roomType);
-                System.out.println("Room Number = " + roomTemp.getRoomNumber());
-                System.out.println("Room Type = " + roomTemp.getRoomType());
-                System.out.println("Price  = " + roomTemp.getRoomPrice());
-                System.out.println("------------------------------");
                 rooms.put(roomTemp.getRoomNumber(), roomTemp);
             }
         }catch (SQLException e){
@@ -74,6 +70,12 @@ public final class ReservationService {
             }
         }
         return rooms.values();
+    }
+
+    public void printAllRooms() {
+        getAllRooms();
+        for(IRoom room: rooms.values())
+            System.out.println(room);
     }
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
@@ -144,13 +146,41 @@ public final class ReservationService {
         return reservations;
     }
 
-    public void printAllRooms() {
-        getAllRooms();
-        for(IRoom room: rooms.values())
-            System.out.println(room);
+    public Collection<Reservation> getAllReservations(){
+        Database db = new Database();
+        db.connect();
+        String sql = "SELECT * FROM Reservation";
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+
+            while(db.result.next()){
+                String reservationId = db.result.getString("reservationId");
+                Customer customer = Customer.researchCustomer(db.result.getString("customerEmail"));
+                Room room = Room.researchRoom(db.result.getString("roomNumber"));
+                Date checkInDate = db.result.getDate("checkInDate");
+                Date checkOutDate = db.result.getDate("checkOutDate");
+                RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
+                Double price = db.result.getDouble("price");
+                Reservation reservationTemp = new Reservation(reservationId, customer, room, checkInDate, checkOutDate);
+                reservations.put(reservationTemp.getReservationId(), reservationTemp);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return reservations.values();
     }
 
     public void printAllReservation() {
+        getAllReservations();
         for(Reservation reservation: reservations.values())
             System.out.println(reservation);
     }
