@@ -3,8 +3,10 @@ package api;
 import model.Customer;
 import model.IRoom;
 import service.CustomerService;
+import service.Database;
 import service.ReservationService;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public final class AdminResource {
@@ -37,14 +39,40 @@ public final class AdminResource {
         return reservationService.getAllRooms();
     }
 
+
     public Collection<Customer> getAllCustomers() {
-        CustomerService customerService = CustomerService.getInstance();
-        return customerService.getAllCustomers();
+        ArrayList<Customer> customers = new ArrayList<>();
+        Database db = new Database();
+        db.connect();
+        String sql = "SELECT * FROM Customer";
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+            while(db.result.next()){
+                String customerEmail = db.result.getString("customerEmail");
+                String firstName = db.result.getString("firstName");
+                String lastName = db.result.getString("lastName");
+                Customer customerTemp = new Customer(customerEmail, firstName, lastName);
+                customers.add(customerTemp);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        return customers;
     }
 
     public void displayAllCustomers() {
-        CustomerService customerService = CustomerService.getInstance();
-        customerService.printAllCustomers();
+        Collection<Customer> customers = getAllCustomers();
+        for(Customer customer: customers)
+            System.out.println(customer);
     }
 
     public void displayAllRooms() {
