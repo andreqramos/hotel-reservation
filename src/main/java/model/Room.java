@@ -74,40 +74,6 @@ public class Room implements IRoom{
         return check;
     }
 
-    public ArrayList<Room> readRoom(){
-        Database db = new Database();
-        db.connect();
-        ArrayList<Room> room = new ArrayList<>();
-        String sql = "SELECT * FROM Room";
-        try{
-            db.statement = db.connection.createStatement();
-            db.result = db.statement.executeQuery(sql);
-
-            while(db.result.next()){
-                String roomNumber = db.result.getString("roomNumber");
-                RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
-                Double price = db.result.getDouble("price");
-                Room roomTemp = new Room(roomNumber, price, roomType);
-                System.out.println("Room Number = " + roomTemp.getRoomNumber());
-                System.out.println("Room Type = " + roomTemp.getRoomType());
-                System.out.println("Price  = " + roomTemp.getRoomPrice());
-                System.out.println("------------------------------");
-                room.add(roomTemp);
-            }
-        }catch (SQLException e){
-            System.out.println("Operation Error: " + e.getMessage());
-        }finally {
-            try {
-                db.connection.close();
-                db.statement.close();
-                db.result.close();
-            }catch (SQLException e){
-                System.out.println("Error to close the connection: " + e.getMessage());
-            }
-        }
-        return room;
-    }
-
     public static Room researchRoom(String roomNumber){
         Database db = new Database();
         db.connect();

@@ -1,9 +1,8 @@
 package service;
 
-import model.Customer;
-import model.IRoom;
-import model.Reservation;
+import model.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public final class ReservationService {
@@ -45,6 +44,35 @@ public final class ReservationService {
     }
 
     public Collection<IRoom> getAllRooms() {
+        Database db = new Database();
+        db.connect();
+        String sql = "SELECT * FROM Room";
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+
+            while(db.result.next()){
+                String roomNumber = db.result.getString("roomNumber");
+                RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
+                Double price = db.result.getDouble("price");
+                Room roomTemp = new Room(roomNumber, price, roomType);
+                System.out.println("Room Number = " + roomTemp.getRoomNumber());
+                System.out.println("Room Type = " + roomTemp.getRoomType());
+                System.out.println("Price  = " + roomTemp.getRoomPrice());
+                System.out.println("------------------------------");
+                rooms.put(roomTemp.getRoomNumber(), roomTemp);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
         return rooms.values();
     }
 
@@ -117,6 +145,7 @@ public final class ReservationService {
     }
 
     public void printAllRooms() {
+        getAllRooms();
         for(IRoom room: rooms.values())
             System.out.println(room);
     }
