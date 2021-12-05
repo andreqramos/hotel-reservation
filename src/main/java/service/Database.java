@@ -12,11 +12,11 @@ public class Database {
     public PreparedStatement pst;
 
     Dotenv dotenv = Dotenv.load();
-    static final String user = dotenv.get("DATABASE_USER");;
-    static final String password = dotenv.get("DATABASE_PASSWORD");
-    static final String database = "HotelReservationDB";
+    final String user = dotenv.get("DATABASE_USER");;
+    final String password = dotenv.get("DATABASE_PASSWORD");
+    final String database = "HotelReservationDB";
 
-    static final String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false";
+    final String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false";
     private boolean check = false;
 
     public void connect(){
