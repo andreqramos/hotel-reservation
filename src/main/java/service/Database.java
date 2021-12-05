@@ -1,5 +1,7 @@
 package service;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.*;
 
 public class Database {
@@ -9,9 +11,10 @@ public class Database {
     public ResultSet result;
     public PreparedStatement pst;
 
-    static final String user = "";
-    static final String password = "";
-    static final String database = "HotelREservationDB";
+    Dotenv dotenv = Dotenv.load();
+    static final String user = dotenv.get("DATABASE_USER");;
+    static final String password = dotenv.get("DATABASE_PASSWORD");
+    static final String database = "HotelReservationDB";
 
     static final String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false";
     private boolean check = false;
