@@ -160,13 +160,37 @@ public final class ReservationService {
         return availableRooms;
     }
 
-    public Collection<Reservation> getCustomersReservation(Customer customer) {
+    public Collection<Reservation> getCustomerReservations(String customerEmail) {
+        Database db = new Database();
+        db.connect();
+        String sql = "SELECT * FROM Reservation WHERE customerEmail=" + customerEmail;
+
         Collection<Reservation> reservations = new ArrayList<>();
-        if(!customersReservations.containsKey(customer.getCustomerEmail()))
-            return reservations;
-        for(String reservationId: customersReservations.get(customer.getCustomerEmail())) {
-            Reservation reservation = this.getAReservation(reservationId);
-            reservations.add(reservation);
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+
+            while(db.result.next()){
+                String reservationId = db.result.getString("reservationId");
+                Customer customer = Customer.researchCustomer(db.result.getString("customerEmail"));
+                Room room = Room.researchRoom(db.result.getString("roomNumber"));
+                Date checkInDate = db.result.getDate("checkInDate");
+                Date checkOutDate = db.result.getDate("checkOutDate");
+                RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
+                Double price = db.result.getDouble("price");
+                Reservation reservationTemp = new Reservation(reservationId, customer, room, checkInDate, checkOutDate);
+                reservations.add(reservationTemp);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
         }
         return reservations;
     }

@@ -27,11 +27,35 @@ public final class CustomerService {
         customers.put(customer.getCustomerEmail(), customer);
     }
 
-    public Customer getCustomer(String customerEmail) {
-        if(customers.containsKey(customerEmail))
-            return customers.get(customerEmail);
-        System.out.printf("Customer with email '%s' was not found.", customerEmail);
-        return null;
+    public Customer getCustomerByCustomerEmail(String customerEmail) {
+        Database db = new Database();
+        db.connect();
+        String sql = "SELECT * FROM Customer WHERE customerEmail=" + customerEmail;
+
+        Customer customer = null;
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+
+            while(db.result.next()){
+                String firstName = db.result.getString("firstName");
+                String lastName = db.result.getString("lastName");
+                customer = new Customer(customerEmail, firstName, lastName);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
+        if(customer == null)
+            System.out.printf("Customer with email '%s' was not found.", customerEmail);
+        return customer;
     }
 
     public Collection<Customer> getAllCustomers() {

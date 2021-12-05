@@ -1,6 +1,5 @@
 package cli;
 
-import api.AdminResource;
 import api.HotelResource;
 import model.Customer;
 import model.MainMenuOption;
@@ -28,11 +27,8 @@ public class MainMenu {
                     String roomNumber = input.nextLine();
                 }
                 case SEE_MY_RESERVATIONS -> {
-                    Scanner input = new Scanner(System.in);
-                    System.out.println("Enter Email format: name@domain.com");
-                    String customerEmail = input.nextLine();
                     HotelResource hotelResource = HotelResource.getInstance();
-                    hotelResource.getCustomersReservations(customerEmail);
+                    hotelResource.displayCustomerReservations();
                 }
                 case CREATE_ACCOUNT -> {
                     Customer customer = Customer.getByTerminal();

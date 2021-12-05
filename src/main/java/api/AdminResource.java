@@ -22,7 +22,7 @@ public final class AdminResource {
 
     public Customer getCustomer(String email) {
         CustomerService customerService = CustomerService.getInstance();
-        return customerService.getCustomer(email);
+        return customerService.getCustomerByCustomerEmail(email);
     }
 
 

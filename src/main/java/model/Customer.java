@@ -96,39 +96,6 @@ public class Customer {
         return check;
     }
 
-    public static Customer researchCustomer(String customerEmail){
-        Database db = new Database();
-        db.connect();
-        String sql = "SELECT * FROM Customer WHERE customerEmail=" + customerEmail;
-
-        Customer customer = new Customer();
-        try{
-            db.statement = db.connection.createStatement();
-            db.result = db.statement.executeQuery(sql);
-
-            while(db.result.next()){
-                String firstName = db.result.getString("firstName");
-                String lastName = db.result.getString("lastName");
-                customer = new Customer(customerEmail, firstName, lastName);
-                System.out.println("customerEmail = " + customer.getCustomerEmail());
-                System.out.println("First Name = " + customer.getFirstName());
-                System.out.println("Last Name = " + customer.getLastName());
-                System.out.println("------------------------------");
-            }
-        }catch (SQLException e){
-            System.out.println("Operation Error: " + e.getMessage());
-        }finally {
-            try {
-                db.connection.close();
-                db.statement.close();
-                db.result.close();
-            }catch (SQLException e){
-                System.out.println("Error to close the connection: " + e.getMessage());
-            }
-        }
-        return customer;
-    }
-
     public boolean updateCustomer(String firstName, String lastName, String customerEmail ){
 
         Database db = new Database();
