@@ -4,6 +4,7 @@ import service.Database;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Room implements IRoom{
     protected String roomNumber;
@@ -20,6 +21,16 @@ public class Room implements IRoom{
         this.roomNumber = "";
         this.price = 0.0;
         this.roomType = RoomType.SINGLE;
+    }
+
+    public static Room getByTerminal() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter room number");
+        String roomId = input.nextLine();
+        System.out.println("Enter price per night");
+        Double roomPrice = input.nextDouble();
+        RoomType roomType = RoomType.getUserOption();
+        return new Room(roomId, roomPrice, roomType);
     }
 
     public String getRoomNumber() {
@@ -43,35 +54,6 @@ public class Room implements IRoom{
         if(roomType.equals(RoomType.SINGLE))
             return "Room Number: " + roomNumber +   " Single bed Room Price: $" + price;
         return "Room Number: " + roomNumber +   " Double bed Room Price: $" + price;
-    }
-
-    public boolean createRoom(Room room){
-
-        Database db = new Database();
-        db.connect();
-
-        String sql = "INSERT INTO Room(roomNumber, roomType, price) VALUES (?, ?, ?)";
-
-        boolean check = true;
-        try{
-            db.pst = db.connection.prepareStatement(sql);
-            db.pst.setString(1, room.getRoomNumber());
-            db.pst.setInt(2, room.getRoomType().getId());
-            db.pst.setDouble(3, room.getRoomPrice());
-            db.pst.execute();
-            check = true;
-        } catch (SQLException e){
-            System.out.println("Operation Error: " + e.getMessage());
-            check = false;
-        } finally {
-            try{
-                db.connection.close();
-                db.pst.close();
-            }catch (SQLException e){
-                System.out.println("Error to close the connection: " + e.getMessage());
-            }
-        }
-        return check;
     }
 
     public static Room researchRoom(String roomNumber){

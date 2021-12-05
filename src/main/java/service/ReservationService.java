@@ -25,7 +25,32 @@ public final class ReservationService {
         return instance;
     }
 
-    public void addRoom(IRoom room) {
+    public void addRoom() {
+        IRoom room = Room.getByTerminal();
+        Database db = new Database();
+        db.connect();
+
+        String sql = "INSERT INTO Room(roomNumber, roomType, price) VALUES (?, ?, ?)";
+
+        boolean check = true;
+        try{
+            db.pst = db.connection.prepareStatement(sql);
+            db.pst.setString(1, room.getRoomNumber());
+            db.pst.setInt(2, room.getRoomType().getId());
+            db.pst.setDouble(3, room.getRoomPrice());
+            db.pst.execute();
+            check = true;
+        } catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+            check = false;
+        } finally {
+            try{
+                db.connection.close();
+                db.pst.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
         rooms.put(room.getRoomNumber(), room);
     }
 

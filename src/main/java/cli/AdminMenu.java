@@ -26,32 +26,13 @@ public class AdminMenu {
                     adminResource.displayAllReservations();
                 }
                 case ADD_ROOM -> {
-                    List<IRoom> rooms = AdminMenu.getRooms();
                     AdminResource adminResource = AdminResource.getInstance();
-                    adminResource.addRoom(rooms);
+                    adminResource.addRoom();
                 }
                 case BACK_TO_MAIN_MENU -> {
                     return;
                 }
             }
         }
-    }
-
-    private static List<IRoom> getRooms() {
-        List<IRoom> rooms = new ArrayList<>();
-        byte runAgain;
-        do {
-            Scanner input = new Scanner(System.in);
-            System.out.println("Enter room number");
-            String roomId = input.nextLine();
-            System.out.println("Enter price per night");
-            Double roomPrice = input.nextDouble();
-            RoomType roomType = RoomType.getUserOption();
-            IRoom room = new Room(roomId, roomPrice, roomType);
-            rooms.add(room);
-            System.out.println("Would you like to add another room y/n");
-            runAgain = input.nextByte();
-        } while(runAgain == 'y');
-        return rooms;
     }
 }
