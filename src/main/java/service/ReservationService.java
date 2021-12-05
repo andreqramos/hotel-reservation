@@ -207,8 +207,6 @@ public final class ReservationService {
                 String roomNumber = db.result.getString("roomNumber");
                 Date checkInDate = db.result.getDate("checkInDate");
                 Date checkOutDate = db.result.getDate("checkOutDate");
-                RoomType roomType = RoomType.getOption(db.result.getInt("roomType"));
-                Double price = db.result.getDouble("price");
                 Reservation reservationTemp = new Reservation(reservationId, customerEmail, roomNumber,
                         checkInDate, checkOutDate);
                 reservations.put(reservationTemp.getReservationId(), reservationTemp);
