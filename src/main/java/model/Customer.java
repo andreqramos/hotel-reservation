@@ -96,37 +96,6 @@ public class Customer {
         return check;
     }
 
-    public ArrayList<Customer> readCustomer(){
-        Database db = new Database();
-        db.connect();
-        ArrayList<Customer> customer = new ArrayList<>();
-        String sql = "SELECT * FROM Customer";
-        try{
-            db.statement = db.connection.createStatement();
-            db.result = db.statement.executeQuery(sql);
-
-            while(db.result.next()){
-                Customer customerTemp = new Customer(db.result.getString("customerEmail"),
-                        db.result.getString("firstName"), db.result.getString("lastName"));
-                System.out.println("customerEmail = " + customerTemp.getCustomerEmail());
-                System.out.println("First Name = " + customerTemp.getFirstName());
-                System.out.println("Last Name = " + customerTemp.getLastName());
-                System.out.println("------------------------------");
-                customer.add(customerTemp);
-            }
-        }catch (SQLException e){
-            System.out.println("Operation Error: " + e.getMessage());
-        }finally {
-            try {
-                db.connection.close();
-                db.statement.close();
-                db.result.close();
-            }catch (SQLException e){
-                System.out.println("Error to close the connection: " + e.getMessage());
-            }
-        }
-        return customer;
-    }
     public static Customer researchCustomer(String customerEmail){
         Database db = new Database();
         db.connect();

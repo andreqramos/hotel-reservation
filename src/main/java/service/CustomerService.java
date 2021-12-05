@@ -2,6 +2,8 @@ package service;
 
 import model.Customer;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +22,8 @@ public final class CustomerService {
         return instance;
     }
 
-    public void addCustomer(String email, String firstName, String lastName) {
-        Customer customer = new Customer(email, firstName, lastName);
+    public void addCustomer(String customerEmail, String firstName, String lastName) {
+        Customer customer = new Customer(customerEmail, firstName, lastName);
         customers.put(customer.getCustomerEmail(), customer);
     }
 
@@ -33,10 +35,35 @@ public final class CustomerService {
     }
 
     public Collection<Customer> getAllCustomers() {
+        Database db = new Database();
+        db.connect();
+        String sql = "SELECT * FROM Customer";
+        try{
+            db.statement = db.connection.createStatement();
+            db.result = db.statement.executeQuery(sql);
+            while(db.result.next()){
+                String customerEmail = db.result.getString("customerEmail");
+                String firstName = db.result.getString("firstName");
+                String lastName = db.result.getString("lastName");
+                Customer customerTemp = new Customer(customerEmail, firstName, lastName);
+                customers.put(customerTemp.getCustomerEmail(), customerTemp);
+            }
+        }catch (SQLException e){
+            System.out.println("Operation Error: " + e.getMessage());
+        }finally {
+            try {
+                db.connection.close();
+                db.statement.close();
+                db.result.close();
+            }catch (SQLException e){
+                System.out.println("Error to close the connection: " + e.getMessage());
+            }
+        }
         return customers.values();
     }
 
     public void printAllCustomers() {
+        getAllCustomers();
         for(Customer customer: customers.values())
             System.out.println(customer);
     }
