@@ -31,7 +31,7 @@ CREATE TABLE Reservation(
 INSERT INTO Customer(customerEmail, firstName, lastName) VALUES
 ('lucas@gmail.com', 'Lucas', 'Graciano'),
 ('andre@outlook.com', 'André', 'Ramos'),
-('flavio@inatel.br', 'Flávio', 'Bergamini'),
+('flavio@yahoo.com', 'Flávio', 'Bergamini'),
 ('renzo@hotmail.com', 'Renzo', 'Mesquita'),
 ('joaopedro@huawei.com', 'João', 'Graciano');
 
@@ -44,7 +44,7 @@ INSERT INTO Room(roomNumber, roomType, price) VALUES
 ('302', '2', 300);
 
 # Cliente sem reserva											OK (joaopedro@huawei.com)
-# Cliente com apenas 1 reserva									OK (flavio@inatel.br)
+# Cliente com apenas 1 reserva									OK (flavio@yahoo.com)
 # Cliente com 2 reservas para a mesma Data						OK (renzo@hotmail.com
 # Cliente com 2 reservas com datas diferentes                   OK (lucas@gmail.com)
 # Quarto sem reserva                                            OK (102)
@@ -53,7 +53,7 @@ INSERT INTO Room(roomNumber, roomType, price) VALUES
 
 INSERT INTO Reservation(reservationId, checkInDate, checkOutDate, customerEmail, roomNumber) VALUES
 ('762BSDI', '2021-12-05', '2021-12-07', 'lucas@gmail.com', '202'),
-('363DN62', '2022-03-01', '2022-03-05', 'flavio@inatel.br', '302'),
+('363DN62', '2022-03-01', '2022-03-05', 'flavio@yahoo.com', '302'),
 ('H9F429H', '2021-12-18', '2021-12-19', 'lucas@gmail.com', '301'),
 ('09V8HV4', '2022-01-05', '2022-01-15', 'renzo@hotmail.com', '201'),
 ('89H2398', '2022-01-15', '2022-01-20', 'andre@outlook.com', '201'),
